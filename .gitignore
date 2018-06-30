@@ -7,3 +7,5 @@
 /.psc*
 /.purs*
 /.psa*
+.vscode/tasks.json
+src/Keys.purs
