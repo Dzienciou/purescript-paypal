@@ -1,12 +1,12 @@
 module Paypal where
 
+import Control.Monad.Eff (kind Effect)
 import Control.Promise (Promise)
-
+import Data.Argonaut (Json)
 
 foreign import data PAYPAL :: Effect
 
-foreign import run :: forall e. Client Mode -> Promise String
-
+foreign import payment :: forall e. Client Mode -> String -> Promise String
 
 data Mode = Sandbox | Production
 type ClientId = String --TODO sholud be newtype
