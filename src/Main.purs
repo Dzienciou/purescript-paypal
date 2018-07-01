@@ -11,20 +11,37 @@ import Control.Monad.Eff.Console (CONSOLE)
 import Control.Promise (toAff)
 import Global.Unsafe (unsafeStringify)
 import Paypal (Mode(..), PAYPAL, client, payment)
-import Types (Payment)
+import Types (Payment, Intent(..), PaymentMethod(..))
 import Simple.JSON (writeJSON)
 
 pay :: Payment
 pay = {
-    intent: "sale", --TODO make in "enum"
+    intent: Sale, --TODO make in "enum"
     payer : {
-        payment_method: "paypal"
+        payment_method: Paypal
     },
     redirect_urls: {
         cancel_url : "http://example.com/cancel",
         return_url : "http://example.com/return"
-      }
-  }
+      },
+    transactions : [{
+      item_list : {
+          items : [{
+              name : "item",
+              sku : "item",
+              price : 1.00,
+              currency : "USD",
+              quantity : 1
+          }]
+      },
+      amount : {
+          currency : "USD",
+          total : 1.00
+      },
+      description : "This is the payment description."
+      }]
+}
+
 
 main :: forall e. Eff (console :: CONSOLE, paypal :: PAYPAL | e) Unit
 main = launchAff_ $ do

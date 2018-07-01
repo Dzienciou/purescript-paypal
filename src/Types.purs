@@ -1,47 +1,41 @@
 module Types where
 
-import Prelude
 
-type PaymentRow ext = (
-    intent :: String, --TODO make in "enum"
+import Simple.JSON (class WriteForeign, write)
+
+data Intent = Sale | Authorize | Order
+
+instance intentWriter :: WriteForeign Intent  where
+  writeImpl = case _ of 
+    Sale -> write "sale"
+    Authorize -> write "authorize"
+    Order -> write "order"
+
+
+
+data PaymentMethod = Paypal | CreditCard
+-- From API Docs: "The use of the PayPal REST /payments APIs to accept credit card payments is restricted"
+instance paymentMethodWriter :: WriteForeign PaymentMethod  where
+  writeImpl = case _ of 
+    Paypal -> write "paypal"
+    CreditCard -> write "credit_card"
+
+
+type Payment = {
+    intent :: Intent,
     payer :: {
-        payment_method :: String
+        payment_method :: PaymentMethod
     },
     redirect_urls :: {
         cancel_url :: String,
         return_url :: String
-      }
-    | ext
-)
+      },
+    transactions :: Array Transaction
+}
 
-type Payment = Record (PaymentRow ())
+-- type Payment = Record (PaymentRow ())
 
--- type PaymentExtras = (transactions :: Array Transaction)
--- type Transaction = (item_list :: )
+type Transaction = {item_list :: {items :: Array Item}, amount :: Amount, description :: String}
 
--- var payment = {
---       "intent": "sale",
---       "transactions": [{
---         "item_list": {
---             "items": [{
---                 "name": "item",
---                 "sku": "item",
---                 "price": "1.00",
---                 "currency": "USD",
---                 "quantity": 1
---             }]
---         },
---         "amount": {
---             "currency": "USD",
---             "total": "1.00"
---         },
---         "description": "This is the payment description."
---         }],
---       "redirect_urls": {
---         "cancel_url": "http://example.com/cancel",
---         "return_url": "http://example.com/return"
---       },
---       "payer": {
---         "payment_method": "paypal"
---       }
---     };
+type Item = {name :: String, sku :: String, price :: Number, currency :: String, quantity:: Int}
+type Amount = {currency :: String, total :: Number}

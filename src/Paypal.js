@@ -6,18 +6,18 @@ const payments = paypal.v1.payments;
 
 exports.payment = function(client) {
   return function(payment) {
+
     var paymentJson = JSON.parse(payment)
     var request = new payments.PaymentCreateRequest();
     request.requestBody(paymentJson);
     
-    var result = client.execute(request).then(function (response) {
+    return client.execute(request).then(function (response) {
       console.log(response.statusCode);
       return (response.result);
     }).catch(function(error) {
       console.error(error.statusCode);
       console.error(error.message);
     });
-    return result;
   }
 }
 
