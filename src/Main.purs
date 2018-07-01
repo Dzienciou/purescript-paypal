@@ -10,13 +10,13 @@ import Control.Monad.Eff.Class (liftEff)
 import Control.Monad.Eff.Console (CONSOLE)
 import Control.Promise (toAff)
 import Global.Unsafe (unsafeStringify)
-import Paypal (Mode(..), PAYPAL, client, payment)
-import Types (Payment, Intent(..), PaymentMethod(..))
+import Paypal (Mode(..), PAYPAL, client, payment, webhook)
+import Types (Payment, Intent(..), PaymentMethod(..), Webhook)
 import Simple.JSON (writeJSON)
 
 pay :: Payment
 pay = {
-    intent: Sale, --TODO make in "enum"
+    intent: Authorize, --TODO make in "enum"
     payer : {
         payment_method: Paypal
     },
@@ -41,10 +41,23 @@ pay = {
       description : "This is the payment description."
       }]
 }
-
+webh::Webhook
+webh = {
+  url : "https://saltem.serveo.net",
+  event_types: [
+    {
+      name: "PAYMENT.AUTHORIZATION.CREATED"
+    },
+    {
+      name: "PAYMENT.AUTHORIZATION.VOIDED"
+    }
+  ]
+}
 
 main :: forall e. Eff (console :: CONSOLE, paypal :: PAYPAL | e) Unit
 main = launchAff_ $ do
   let clien = client Sandbox clientId secret
   aff <- toAff $ payment clien (writeJSON pay)
   log $ unsafeStringify aff
+  -- aff <- toAff $ webhook clien (writeJSON webh)
+  -- log $ unsafeStringify aff

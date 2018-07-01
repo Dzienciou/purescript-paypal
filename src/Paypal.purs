@@ -7,6 +7,7 @@ import Data.Argonaut (Json)
 foreign import data PAYPAL :: Effect
 
 foreign import payment :: forall e. Client Mode -> String -> Promise String
+foreign import webhook :: forall e. Client Mode -> String -> Promise String
 
 data Mode = Sandbox | Production
 type ClientId = String --TODO sholud be newtype

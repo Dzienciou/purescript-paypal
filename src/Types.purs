@@ -11,15 +11,12 @@ instance intentWriter :: WriteForeign Intent  where
     Authorize -> write "authorize"
     Order -> write "order"
 
-
-
 data PaymentMethod = Paypal | CreditCard
 -- From API Docs: "The use of the PayPal REST /payments APIs to accept credit card payments is restricted"
 instance paymentMethodWriter :: WriteForeign PaymentMethod  where
   writeImpl = case _ of 
     Paypal -> write "paypal"
     CreditCard -> write "credit_card"
-
 
 type Payment = {
     intent :: Intent,
@@ -33,9 +30,15 @@ type Payment = {
     transactions :: Array Transaction
 }
 
--- type Payment = Record (PaymentRow ())
-
 type Transaction = {item_list :: {items :: Array Item}, amount :: Amount, description :: String}
-
 type Item = {name :: String, sku :: String, price :: Number, currency :: String, quantity:: Int}
 type Amount = {currency :: String, total :: Number}
+
+type Webhook = {
+    url :: String,
+    event_types :: Array EventType 
+}
+type EventType = {
+    name :: String
+--  ,  status :: String
+}

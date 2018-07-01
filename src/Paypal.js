@@ -1,6 +1,7 @@
 'use strict';
 const paypal = require('paypal-rest-sdk');
 const payments = paypal.v1.payments;
+const webhooks = paypal.v1.webhooks;
 
 
 
@@ -21,6 +22,23 @@ exports.payment = function(client) {
   }
 }
 
+exports.webhook = function(client){
+  return function(webhook) {
+
+    var webhookJson = JSON.parse(webhook)
+    var request = new webhooks.WebhookCreateRequest();
+    request.requestBody(webhookJson);
+    
+    return client.execute(request).then(function (response) {
+      console.log(response.statusCode);
+      return (response.result);
+    }).catch(function(error) {
+      console.error(error.statusCode);
+      console.error(error.message);
+    });
+};
+}
+
 exports.clientImpl = 
  function(mode){
    return function(id){
@@ -29,4 +47,4 @@ exports.clientImpl =
         return new paypal.core.PayPalHttpClient(env);
     };
    };
- };
+ }
