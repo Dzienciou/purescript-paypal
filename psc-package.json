@@ -1,8 +1,10 @@
 {
   "name": "purescript-paypal",
-  "set": "psc-0.11.7",
-  "source": "https://github.com/purescript/package-sets.git",
+  "set": "df",
+  "source": "https://github.com/paluh/package-sets.git",
   "depends": [
+    "debug",
+    "hyper",
     "simple-json",
     "argonaut",
     "aff-promise",

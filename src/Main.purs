@@ -16,7 +16,7 @@ import Simple.JSON (writeJSON)
 
 pay :: Payment
 pay = {
-    intent: Authorize, --TODO make in "enum"
+    intent: Sale, --TODO make in "enum"
     payer : {
         payment_method: Paypal
     },
