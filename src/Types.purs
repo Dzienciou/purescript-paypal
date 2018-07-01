@@ -42,3 +42,8 @@ type EventType = {
     name :: String
 --  ,  status :: String
 }
+
+type Notification = 
+  {  id :: String
+  ,  state :: String 
+}
