@@ -3,6 +3,10 @@
   "set": "df",
   "source": "https://github.com/paluh/package-sets.git",
   "depends": [
+    "hyperdrive",
+    "affjax",
+    "polyform-validators",
+    "record-fold",
     "validation",
     "debug",
     "hyper",

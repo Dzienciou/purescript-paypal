@@ -32,7 +32,7 @@ type Payment = {
 
 type Transaction = {item_list :: {items :: Array Item}, amount :: Amount, description :: String}
 type Item = {name :: String, sku :: String, price :: Number, currency :: String, quantity:: Int}
-type Amount = {currency :: String, total :: Number}
+type Amount = {currency :: String, total :: String}
 
 type Webhook = {
     url :: String,
@@ -45,5 +45,16 @@ type EventType = {
 
 type Notification = 
   {  id :: String
-  ,  state :: String 
-}
+  ,  event_type :: String 
+  ,  resource :: Resource
+  }
+
+type Resource = 
+    { id :: String
+    , amount :: Amount
+    }
+
+type Execute = 
+  {  paymentId :: String
+  ,  payerId :: String
+  }

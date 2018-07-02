@@ -4,8 +4,17 @@ const payments = paypal.v1.payments;
 const webhooks = paypal.v1.webhooks;
 
 
+exports.ffiexecute = function(client) {
+  return function(paymentId){
+    return function(payerId){
+      var body = {"payer_id" : payerId}
+      var request = new payments.PaymentCreateRequest(paymentId);
+      request.requestBody(body);
+    };
+  };
+}
 
-exports.payment = function(client) {
+exports.ffipayment = function(client) {
   return function(payment) {
 
     var paymentJson = JSON.parse(payment)

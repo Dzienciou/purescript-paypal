@@ -10,9 +10,8 @@ import Control.Monad.Eff.Class (liftEff)
 import Control.Monad.Eff.Console (CONSOLE)
 import Control.Promise (toAff)
 import Global.Unsafe (unsafeStringify)
-import Paypal (Mode(..), PAYPAL, client, payment, webhook)
+import Paypal (ClientId(..), Mode(..), PAYPAL, ClientSecret(..), client, payment, webhook)
 import Types (Payment, Intent(..), PaymentMethod(..), Webhook)
-import Simple.JSON (writeJSON)
 
 pay :: Payment
 pay = {
@@ -36,7 +35,7 @@ pay = {
       },
       amount : {
           currency : "USD",
-          total : 1.00
+          total : "1.00"
       },
       description : "This is the payment description."
       }]
@@ -56,8 +55,8 @@ webh = {
 
 main :: forall e. Eff (console :: CONSOLE, paypal :: PAYPAL | e) Unit
 main = launchAff_ $ do
-  let clien = client Sandbox clientId secret
-  aff <- toAff $ payment clien (writeJSON pay)
+  let clien = client Sandbox (ClientId clientId) (ClientSecret secret)
+  aff <- toAff $ payment clien pay
   log $ unsafeStringify aff
   -- aff <- toAff $ webhook clien (writeJSON webh)
   -- log $ unsafeStringify aff
