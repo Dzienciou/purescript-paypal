@@ -34,6 +34,25 @@ type Transaction = {item_list :: {items :: Array Item}, amount :: Amount, descri
 type Item = {name :: String, sku :: String, price :: Number, currency :: String, quantity:: Int}
 type Amount = {currency :: String, total :: String}
 
+type PaymentResponse = 
+  { statusCode:: Int
+  , result:: PaymentResult
+  }
+
+type PaymentResult = 
+    { id :: String
+    , intent :: String
+    , state :: String
+    , links :: Array Link
+    }
+
+type Link = 
+  { href :: URL
+  , rel  :: String
+  , method :: String
+  }
+type URL = String
+
 type Webhook = {
     url :: String,
     event_types :: Array EventType 
@@ -57,4 +76,14 @@ type Resource =
 type Execute = 
   {  paymentId :: String
   ,  payerId :: String
+  }
+
+type ExecuteResponse = 
+ { statusCode :: Int
+ , result :: ExecuteResult
+ }
+
+type ExecuteResult = 
+  { id :: String
+  -- additional info?
   }
